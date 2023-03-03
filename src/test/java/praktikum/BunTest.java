@@ -14,16 +14,13 @@ public class BunTest{
 
     @Before
     public void setUp(){
-
-
         bunName = RandomFunctionsLib.getRandomLetterString(10);
         bunPrice = RandomFunctionsLib.getRandomFloat();
-
         bun = new Bun(bunName, bunPrice);
     }
 
     @Test
-    public void testTestGetName() {
+    public void testGetName() {
         Assert.assertEquals("Название булочки такое же, как при создании.", bunName, bun.getName());
     }
 

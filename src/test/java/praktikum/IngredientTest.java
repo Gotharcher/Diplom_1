@@ -5,8 +5,6 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import static org.junit.Assert.*;
-
 public class IngredientTest {
 
     Ingredient ingredient;
@@ -39,8 +37,8 @@ public class IngredientTest {
 
     @Test
     public void directFieldsTest(){
-        Assert.assertEquals("Цена булочки совпадает до полутысячных.", ingredientPrice, ingredient.price, 0.005);
-        Assert.assertEquals("Название булочки такое же, как при создании.", ingredientName, ingredient.name);
+        Assert.assertEquals("Цена ингридиента совпадает до полутысячных.", ingredientPrice, ingredient.price, 0.005);
+        Assert.assertEquals("Название ингридиента такое же, как при создании.", ingredientName, ingredient.name);
         Assert.assertEquals("Тип ингридиента совпадает", ingredientType, ingredient.getType());
     }
 }
