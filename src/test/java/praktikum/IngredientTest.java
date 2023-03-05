@@ -13,7 +13,7 @@ public class IngredientTest {
     String ingredientName;
 
     @Before
-    public void setUp(){
+    public void setUp() {
         ingredientPrice = RandomFunctionsLib.getRandomFloat();
         ingredientName = RandomFunctionsLib.getRandomLetterString(10);
         ingredientType = IngredientType.values()[RandomFunctionsLib.getRandomInt(1)];
@@ -23,7 +23,7 @@ public class IngredientTest {
     @Test
     public void getPrice() {
         Assert.assertEquals("Цена ингридиента совпадает до полутысячных.", ingredientPrice, ingredient.getPrice(), 0.005);
-}
+    }
 
     @Test
     public void getName() {
@@ -35,10 +35,4 @@ public class IngredientTest {
         Assert.assertEquals("Тип ингридиента совпадает", ingredientType, ingredient.getType());
     }
 
-    @Test
-    public void directFieldsTest(){
-        Assert.assertEquals("Цена ингридиента совпадает до полутысячных.", ingredientPrice, ingredient.price, 0.005);
-        Assert.assertEquals("Название ингридиента такое же, как при создании.", ingredientName, ingredient.name);
-        Assert.assertEquals("Тип ингридиента совпадает", ingredientType, ingredient.getType());
-    }
 }

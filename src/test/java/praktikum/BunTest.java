@@ -1,22 +1,34 @@
 package praktikum;
 
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.Parameterized;
 
-import helpers.RandomFunctionsLib;
+@RunWith(Parameterized.class)
+public class BunTest {
 
-public class BunTest{
-
+    private final String bunName;
+    private final float bunPrice;
     Bun bun;
-    String bunName;
-    float bunPrice;
 
-    @Before
-    public void setUp(){
-        bunName = RandomFunctionsLib.getRandomLetterString(10);
-        bunPrice = RandomFunctionsLib.getRandomFloat();
+    public BunTest(String bunName, float bunPrice) {
+        this.bunName = bunName;
+        this.bunPrice = bunPrice;
         bun = new Bun(bunName, bunPrice);
+    }
+
+    @Parameterized.Parameters
+    public static Object[][] getBuns() {
+        return new Object[][]{
+                {"Вкусная", 150F},
+                {"Съедобная", Float.MAX_VALUE},
+                {"Негативная", -150F},
+                {"Бесценная", 0F},
+                {"", 150F},
+                {"        ", 150F},
+                {"№;!:/-+!@#", 150F},
+        };
     }
 
     @Test
@@ -29,9 +41,4 @@ public class BunTest{
         Assert.assertEquals("Цена булочки совпадает до полутысячных.", bunPrice, bun.getPrice(), 0.005);
     }
 
-    @Test
-    public void directFieldsTest(){
-        Assert.assertEquals("Цена булочки совпадает до полутысячных.", bunPrice, bun.price, 0.005);
-        Assert.assertEquals("Название булочки такое же, как при создании.", bunName, bun.name);
-    }
 }

@@ -17,7 +17,7 @@ public class IngredientTypeTest {
     }
 
     @Parameterized.Parameters
-    public static Object[][] getFamilies() {
+    public static Object[][] getTypes() {
         return new Object[][]{{"FILLING", true}, {"SAUCE", true}, {"TOPPING", false},};
     }
 

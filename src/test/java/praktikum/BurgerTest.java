@@ -1,10 +1,8 @@
 package praktikum;
 
-import helpers.RandomFunctionsLib;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
-import org.mockito.internal.matchers.Null;
 
 import java.util.List;
 
@@ -17,7 +15,7 @@ public class BurgerTest {
     Ingredient ingredient;
 
     @Before
-    public void setUp(){
+    public void setUp() {
         bun = Mockito.mock(Bun.class);
         Mockito.when(bun.getPrice()).thenReturn(150F);
         Mockito.when(bun.getName()).thenReturn("Mocked bun 1");
@@ -25,25 +23,23 @@ public class BurgerTest {
         ingredient = Mockito.mock(Ingredient.class);
         Mockito.when(ingredient.getPrice()).thenReturn(50F);
         Mockito.when(ingredient.getName()).thenReturn("Mocked ingredient 1");
+        Mockito.when(ingredient.getType()).thenReturn(IngredientType.FILLING);
 
         burger = new Burger();
     }
 
     @Test
     public void setBuns() {
-        assertNull("По умолчанию, булочки нет.", burger.bun);
         burger.setBuns(bun);
-        assertEquals("Подставилась тестовая булочка, совпадает название", bun.getName(), burger.bun.getName());
-        assertEquals("Подставилась тестовая булочка, совпадает цена", bun.getPrice(), burger.bun.getPrice(), 0.005);
+        assertEquals("Подставилась тестовая булочка", bun, burger.bun);
     }
 
     @Test
     public void addIngredient() {
         int ingredientsCount = burger.ingredients.size();
         burger.addIngredient(ingredient);
-        assertEquals("Количество ингридиентов увеличилось на 1", ingredientsCount+1, burger.ingredients.size());
-        assertEquals("Последний добавленный ингридиент - с тем же именем, что мы добавили", ingredient.getName(), burger.ingredients.get(burger.ingredients.size()-1).getName());
-        assertEquals("Последний добавленный ингридиент - с той же ценой, что мы добавили", ingredient.getPrice(), burger.ingredients.get(burger.ingredients.size()-1).getPrice(), 0.005);
+        assertEquals("Количество ингридиентов увеличилось на 1", ingredientsCount + 1, burger.ingredients.size());
+        assertEquals("Последний добавленный ингридиент - добавленный тестовый ингридиент.", ingredient, burger.ingredients.get(burger.ingredients.size() - 1));
     }
 
     @Test
@@ -56,31 +52,59 @@ public class BurgerTest {
         burger.addIngredient(ingredientToDelete);
         burger.addIngredient(ingredient);
 
-        assertTrue("В списке ингридиентов есть тот, который мы хотим удалить",ingredientToBeDeletedIsPresent(ingredientToDelete, burger.ingredients));
+        assertTrue("В списке ингридиентов есть тот, который мы хотим удалить", ingredientToBeDeletedIsPresent(ingredientToDelete, burger.ingredients));
 
         int ingredientsCount = burger.ingredients.size();
         burger.removeIngredient(2);
-        assertEquals("Количество ингридиентов уменшилось на 1", ingredientsCount-1, burger.ingredients.size());
+        assertEquals("Количество ингридиентов уменшилось на 1", ingredientsCount - 1, burger.ingredients.size());
 
         assertFalse("В списке ингридиентов отсутствует тот, который мы хотели удалить", ingredientToBeDeletedIsPresent(ingredientToDelete, burger.ingredients));
     }
 
     @Test
     public void moveIngredient() {
+        Ingredient ingredientMoving = Mockito.mock(Ingredient.class);
+
+        burger.setBuns(bun);
+        burger.addIngredient(ingredient);
+        burger.addIngredient(ingredientMoving);
+
+        burger.moveIngredient(1, 0);
+        assertEquals("Ингридиент переместился на первое место в списке", ingredientMoving, burger.ingredients.get(0));
     }
 
     @Test
     public void getPrice() {
+        burger.setBuns(bun);
+        burger.addIngredient(ingredient);
+        burger.addIngredient(ingredient);
+        burger.addIngredient(ingredient);
+
+        float totalPrice = bun.getPrice() * 2 + ingredient.getPrice() * 3;
+
+        assertEquals("Цена бургера совпадает с ценой ингридиентов", totalPrice, burger.getPrice(), 0.005);
     }
 
     @Test
     public void getReceipt() {
+        burger.setBuns(bun);
+        burger.addIngredient(ingredient);
+        burger.addIngredient(ingredient);
+
+        System.out.println();
+        StringBuilder recieptLegalStringBuilder = new StringBuilder("(==== Mocked bun 1 ====)\r\n");
+        recieptLegalStringBuilder.append("= filling Mocked ingredient 1 =\r\n");
+        recieptLegalStringBuilder.append("= filling Mocked ingredient 1 =\r\n");
+        recieptLegalStringBuilder.append("(==== Mocked bun 1 ====)\r\n");
+        recieptLegalStringBuilder.append(String.format("%nPrice: %f%n", burger.getPrice()));
+
+        assertEquals("Рецепт из метода совпадает с ожидаемым рецептом", recieptLegalStringBuilder.toString(), burger.getReceipt());
     }
 
-    public boolean ingredientToBeDeletedIsPresent(Ingredient ingredientToDelete, List<Ingredient> ingredientList){
+    public boolean ingredientToBeDeletedIsPresent(Ingredient ingredientToDelete, List<Ingredient> ingredientList) {
         boolean ingredientToBeDeletedIsPresent = false;
-        for(Ingredient ing: ingredientList){
-            if (ing==ingredientToDelete) {
+        for (Ingredient ing : ingredientList) {
+            if (ing == ingredientToDelete) {
                 ingredientToBeDeletedIsPresent = true;
                 break;
             }
